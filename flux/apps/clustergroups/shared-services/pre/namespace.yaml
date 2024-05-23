@@ -1,0 +1,10 @@
+# Moved to post, but leaving this file here so the pre folder contains something. Otherwise post will fail with a dependency error
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: vault
+#   labels:
+#     pod-security.kubernetes.io/enforce: privileged
+# spec: {}
+# status: {}

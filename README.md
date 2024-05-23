@@ -47,7 +47,7 @@ Before creating the TMC objects, you will need to rename the folders in flux/clu
 
 ### Create the gitrepo in TMC
 
-This step is done manually for now since the current version of TMC-SM doesn't support this for air-gapped git servers
+This step is done manually for now since the current version of TMC-SM doesn't support everything we need. TODO: Automate this
 
 Under your cluster group->Add-ons->Repository Credentials, create an SSH key repository credential
 
@@ -55,7 +55,7 @@ Note: Known hosts can be retrieved by running a `ssh-keyscan <git-server>` again
 
 Under your cluster group->Add-ons->Git repositories, add a Git repository pointing to your repo. Select the repository credential created in the previous step.
 
-Once TMC-SM supports this for air-gapped git servers, it could be added with a command similar to the following:
+Once this is automated, it could be added with a command similar to the following:
 ```
 ytt --data-values-file tanzu-cli/values -f tanzu-cli/cd/git-repo-template.yml > generated/gitrepo.yml
 tanzu tmc continuousdelivery gitrepository create -f generated/gitrepo.yml -s clustergroup
