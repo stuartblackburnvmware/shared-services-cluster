@@ -125,7 +125,7 @@ vault login -tls-skip-verify
 
 ### Create secrets engine
 ```
-vault secrets enable -path=secret -tls-skip-verify kv
+vault secrets enable -path=secret -tls-skip-verify -version=2 kv
 ```
 
 ### Add/read test secret to newly created secrets engine
