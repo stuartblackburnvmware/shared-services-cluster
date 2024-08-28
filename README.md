@@ -136,7 +136,7 @@ vault kv get -tls-skip-verify secret/test-secret
 ```
 
 ### Configure vault AD integration
-Run the following commands to enable ldap auth:
+Run the following command to enable ldap auth:
 ```
 vault auth enable ldap
 ```
