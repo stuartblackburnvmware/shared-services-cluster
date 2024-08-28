@@ -134,3 +134,44 @@ vault kv put -tls-skip-verify secret/test-secret testkeyname=testkeyvalue
 vault kv list -tls-skip-verify secret
 vault kv get -tls-skip-verify secret/test-secret
 ```
+
+### Configure vault AD integration
+Run the following commands to enable ldap auth:
+```
+vault auth enable ldap
+```
+
+Run the following command to configure ldap auth. Replace parameters as needed.
+```
+vault write auth/ldap/config \
+    url="ldaps://dc01.stuart-lab.com" \
+    userdn="ou=Users,ou=tmcsm,dc=stuart-lab,dc=com" \
+    groupdn="ou=Groups,ou=tmcsm,dc=stuart-lab,dc=com" \
+    binddn="CN=sa_pinniped,OU=tmcsm,DC=stuart-lab,DC=com" \
+    bindpass='<replaceme>' \
+    userattr="sAMAccountName" \
+    groupfilter="(&(objectClass=group)(cn=tmc-admin)(member={{.UserDN}}))" \
+    groupattr="cn" \
+    insecure_tls=false \
+    certificate=@dc-ca.pem
+```
+
+Configure an admin level access policy which will be assigned to the group defined in the step above:
+```
+vault policy write admin-policy - <<EOF
+path "sys/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+path "auth/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+path "secret/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+EOF
+```
+
+Assign this policy to the desired AD group:
+```
+vault write auth/ldap/groups/tmc-admin policies=admin-policy
+```
