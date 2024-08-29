@@ -123,6 +123,27 @@ export VAULT_TOKEN="<from previous step>"
 vault login -tls-skip-verify
 ```
 
+### Enable TLS
+The following block of code in the helm data values is referencing a TLS secret by default:
+```
+    extraTls:
+    - hosts:
+        - #@ data.values.vault_fqdn
+      secretName: #@ data.values.vault_fqdn + "-tls"%   
+```
+
+The TLS secret is managed manually. It can be created with the following command:
+```
+kubectl create secret tls <vault-fqdn>-tls \
+  --cert=tls.crt \
+  --key=tls.key \
+  --namespace=vault
+```
+
+Once that secret is created, vault should be accessible over https by default
+
+Note: Any time this certificate needs to be rotated, this secret will need to be updated.
+
 ### Create secrets engine
 ```
 vault secrets enable -path=secret -tls-skip-verify -version=2 kv

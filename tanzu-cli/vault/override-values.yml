@@ -5,5 +5,7 @@ server:
     enabled: true
     tls: true
     hostname: #@ data.values.vault_fqdn
-    annotations: 
-      cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+    extraTls:
+    - hosts:
+        - #@ data.values.vault_fqdn
+      secretName: #@ data.values.vault_fqdn + "-tls"
